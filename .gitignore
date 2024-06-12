@@ -1,0 +1,4 @@
+.vscode
+ignore
+.rnn_env
+char_rnn.ipynb
