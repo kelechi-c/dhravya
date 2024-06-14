@@ -2,3 +2,4 @@
 ignore
 .rnn_env
 char_rnn.ipynb
+data_scripts/pdf_data

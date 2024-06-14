@@ -1,7 +1,6 @@
 import re, nltk
 from tqdm.auto import tqdm 
 from collections import Counter
-        
 
 
 def tokenize_text(text_input):
@@ -14,7 +13,7 @@ def preprocess_text(text):
     text = re.sub(r"[^a-z0-9\s]", "", text)
     tokens = tokenize_text(text)
     tokens = [t for t in tokens if t not in nltk.corpus.stopwords.words("english")]
-    return tokens
+    return tokens 
 
 
 def create_vocabulary(text_dataset):
