@@ -49,6 +49,8 @@ class liquid_RNN(nn.Module):
 
 
 rnn_model = liquid_RNN(vocab_size, vocab_size, hidden_size, num_layers).to(device)
+rnn_model = torch.compile(rnn_model) # use torch.compile 
+
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(rnn_model.parameters(), lr=lr)
 
@@ -72,18 +74,17 @@ def train_step(): #Trainning step for each epoch
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        
+
         # Update data split for the next text batch
         data_split += seq_len
         n_steps += 1
-        
+
         if data_split + seq_len + 1 > data_size:
-            break # Break loop when the model has terated tru the entire dataset
-        
-        
-        wandb.log({"loss": training_loss}) # Log the loss to weights and biases dashboard
-    
-    return training_loss
+            break # Break loop when the model has iterated tru the entire dataset
+
+        wandb.log({"loss": training_loss/n_steps}) # Log the loss to weights and biases dashboard
+
+    return training_loss/n_steps
 
 
 def generate_sample(): # generate sample sequence after each epoch
@@ -91,7 +92,7 @@ def generate_sample(): # generate sample sequence after each epoch
     data_pointer = 0
     hidden_state = None
     random_idx = np.random.randint(data_size - 1)
-    test_input_seq = dataset_text[random_idx : random_idx + 1]
+    test_input_seq = dataset_text[random_idx : random_idx + 1] 
     
     while True:
         output, hidden_state = rnn_model(test_input_seq, hidden_state) # get model predictions
@@ -101,7 +102,7 @@ def generate_sample(): # generate sample sequence after each epoch
 
         print(id_to_text[index.item()], end="") # type: ignore
         
-        test_input_seq[0][0] = index.item()
+        test_input_seq[0][0] = index.item() 
         data_pointer += 1
         
         if data_pointer > out_seq_len:
@@ -111,14 +112,16 @@ def generate_sample(): # generate sample sequence after each epoch
 def train_model():
 
     for epoch in tqdm(range(epochs)):
-        
+
         train_loss = train_step()
-        
+
+        print(f"epoch {epoch}")
         print('sample text => ')
         generate_sample() # print genrated sample
+        print('\n')
         print("----------------------------------------")
-        
+
         print(f'epoch {epoch} of {epochs}, loss => {train_loss}')
-        
+
 
 train_model()
