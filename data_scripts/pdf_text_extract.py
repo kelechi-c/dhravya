@@ -20,8 +20,8 @@ pdf_list = [os.path.join(base_folder, pdfile) for pdfile in pdf_list]
 
 
 def clean_text(text):
-    regex_format = r"[^\w\s\d!@#\$%\&'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\[\]\^\_\{\|\}~]"  # Leaves behind onl
-    cleaned_text = re.sub(regex_format, '', text) 
+    regex_format = r"[^\w\s]"  # Leaves behind only text and whitespace characters
+    cleaned_text = re.sub(regex_format, '', text)
 
     return cleaned_text
 
