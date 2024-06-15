@@ -31,7 +31,7 @@ run = wandb.init(project="dhravya", name="respaper_rnn_1", config=wandb_config)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-class liquid_RNN(nn.Module):
+class Liquid_Rnn(nn.Module):
     def __init__(self, input_size, out_size, hidden_size, num_layers):
         super().__init__()
         self.embedding = nn.Embedding(input_size, input_size)
@@ -48,14 +48,14 @@ class liquid_RNN(nn.Module):
         return output, (hidden_state[0].detach(), hidden_state[1].detach())
 
 
-rnn_model = liquid_RNN(vocab_size, vocab_size, hidden_size, num_layers).to(device)
+rnn_model = Liquid_Rnn(vocab_size, vocab_size, hidden_size, num_layers).to(device)
 rnn_model = torch.compile(rnn_model) # use torch.compile 
 
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(rnn_model.parameters(), lr=lr)
 
 
-def train_step(): #Trainning step for each epoch
+def train_step(): #Training step for each epoch
     hidden_state = None
     training_loss = 0
     n_steps = 0
@@ -96,7 +96,7 @@ def generate_sample(): # generate sample sequence after each epoch
     
     while True:
         output, hidden_state = rnn_model(test_input_seq, hidden_state) # get model predictions
-        output = func_nn.softmax(torch.squeeze(output), dim=0)
+        output = func_nn.softmax(torch.squeeze(output), dim=0) 
         distro = torch.distributions.Categorical(output)
         index = distro.sample()
 
@@ -110,7 +110,7 @@ def generate_sample(): # generate sample sequence after each epoch
 
 
 def train_model():
-
+    
     for epoch in tqdm(range(epochs)):
 
         train_loss = train_step()
