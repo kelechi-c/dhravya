@@ -4,3 +4,5 @@ ignore
 char_rnn.ipynb
 data_scripts/pdf_data
 data_scripts/__pycache__
+__pycache__
+wandb

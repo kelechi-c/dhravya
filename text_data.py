@@ -23,3 +23,4 @@ for idx, char in enumerate(dataset_text):
 
 dataset_text = torch.tensor(dataset_text).to(device)
 dataset_text = torch.unsqueeze(dataset_text, dim=1)
+print('Dataset loaded from text file')
